@@ -1,7 +1,6 @@
 package br.com.fbd.contosmachadodeassis.main;
 
 import br.com.fbd.contosmachadodeassis.interfaces.ContoDAO;
-import br.com.fbd.contosmachadodeassis.interfaces.PeriodicoDAO;
 
 import java.util.List;
 
