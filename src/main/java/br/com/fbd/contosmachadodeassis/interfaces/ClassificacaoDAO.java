@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static br.com.fbd.contosmachadodeassis.utils.JDBCUtil.getConnection;
+import java.sql.SQLException;
 
 public class ClassificacaoDAO implements GenericDAO<Classificacao> {
 
@@ -15,16 +16,15 @@ public class ClassificacaoDAO implements GenericDAO<Classificacao> {
     public void insert(Classificacao classificacao) {
         String sql = "INSERT INTO classificacao (tipo) VALUES (?)";
         try (
-        Connection con = getConnection();
-        PreparedStatement insertSQL = con.prepareStatement(sql);
+            Connection con = getConnection();
+            PreparedStatement insertSQL = con.prepareStatement(sql);
         ) {
             insertSQL.setString(1, classificacao.getTipo());
-        }
-        catch (Exception e) {
-            e.printStackTrace();
+        } catch (SQLException e) {
+            System.out.println("Erro ao inserir Classificacao: " + e.getMessage());
         }
     }
-
+    
     @Override
     public Classificacao findByID(int id) {
         String sql = "SELECT * FROM classificacao WHERE id = ?";
@@ -37,8 +37,7 @@ public class ClassificacaoDAO implements GenericDAO<Classificacao> {
             if (rs.next()) {
                 return new Classificacao(id, rs.getString("tipo"));
             }
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return null;

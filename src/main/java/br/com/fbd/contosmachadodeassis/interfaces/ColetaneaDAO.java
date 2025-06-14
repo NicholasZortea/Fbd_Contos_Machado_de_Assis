@@ -7,6 +7,7 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 import static br.com.fbd.contosmachadodeassis.utils.JDBCUtil.getConnection;
+import java.sql.SQLException;
 
 public class ColetaneaDAO implements GenericDAO<Coletanea> {
     @Override
@@ -19,8 +20,8 @@ public class ColetaneaDAO implements GenericDAO<Coletanea> {
             insertSQL.setString(1, coletanea.getNome());
             insertSQL.executeUpdate();
         }
-        catch (Exception e) {
-            e.printStackTrace();
+        catch (SQLException e) {
+            System.out.println("Erro ao inserir Coletanea: " + e.getMessage());
         }
     }
     @Override
