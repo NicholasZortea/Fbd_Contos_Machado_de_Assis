@@ -1,8 +1,6 @@
 package br.com.fbd.contosmachadodeassis.interfaces;
 
 import br.com.fbd.contosmachadodeassis.main.Conto;
-import com.mysql.cj.x.protobuf.MysqlxPrepare;
-import com.sun.jdi.request.ExceptionRequest;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -11,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static br.com.fbd.contosmachadodeassis.utils.JDBCUtil.getConnection;
+import java.sql.SQLException;
 
 
 public class ContoDAO implements GenericDAO<Conto> {
@@ -30,8 +29,8 @@ public class ContoDAO implements GenericDAO<Conto> {
             insertSQL.setInt(5, conto.getIdPeriodico());
             insertSQL.setInt(6, conto.getIdClassificacao());
         }
-        catch (Exception e) {
-            e.printStackTrace();
+        catch (SQLException e) {
+            System.out.println("Erro ao inserir Conto: " + e.getMessage());
         }
     }
 

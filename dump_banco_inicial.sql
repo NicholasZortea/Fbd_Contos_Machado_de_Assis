@@ -25,8 +25,9 @@ DROP TABLE IF EXISTS `classificacao`;
 CREATE TABLE `classificacao` (
   `id` int NOT NULL AUTO_INCREMENT,
   `tipo` varchar(50) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uq_tipo` (`tipo`)
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -35,7 +36,7 @@ CREATE TABLE `classificacao` (
 
 LOCK TABLES `classificacao` WRITE;
 /*!40000 ALTER TABLE `classificacao` DISABLE KEYS */;
-INSERT INTO `classificacao` VALUES (1,'reescritos'),(2,'autoria questionavel'),(3,'experimental e dificil classificacao'),(4,'conto com caracteristicas de novela'),(5,'conto padrao');
+INSERT INTO `classificacao` VALUES (2,'autoria questionavel'),(4,'conto com caracteristicas de novela'),(5,'conto padrao'),(3,'experimental e dificil classificacao'),(1,'reescritos');
 /*!40000 ALTER TABLE `classificacao` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -49,7 +50,8 @@ DROP TABLE IF EXISTS `coletanea`;
 CREATE TABLE `coletanea` (
   `id` int NOT NULL AUTO_INCREMENT,
   `nome` varchar(50) NOT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uq_nome` (`nome`)
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -59,7 +61,7 @@ CREATE TABLE `coletanea` (
 
 LOCK TABLES `coletanea` WRITE;
 /*!40000 ALTER TABLE `coletanea` DISABLE KEYS */;
-INSERT INTO `coletanea` VALUES (1,'Páginas Recolhidas (Ver. 2)'),(2,'Relíquias de Casa Velha (Vol. 2)'),(3,'Contos Fluminenses'),(4,'Contos Fluminenses (Vol. 2)');
+INSERT INTO `coletanea` VALUES (3,'Contos Fluminenses'),(4,'Contos Fluminenses (Vol. 2)'),(1,'Páginas Recolhidas (Ver. 2)'),(2,'Relíquias de Casa Velha (Vol. 2)');
 /*!40000 ALTER TABLE `coletanea` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -79,6 +81,7 @@ CREATE TABLE `conto` (
   `idPeriodico` int NOT NULL,
   `idClassificacao` int NOT NULL,
   PRIMARY KEY (`id`),
+  UNIQUE KEY `uq_titulo` (`titulo`),
   KEY `idClassificacao` (`idClassificacao`),
   KEY `idPeriodico` (`idPeriodico`),
   KEY `idColetanea` (`idColetanea`),
@@ -108,7 +111,8 @@ DROP TABLE IF EXISTS `periodico`;
 CREATE TABLE `periodico` (
   `id` int NOT NULL AUTO_INCREMENT,
   `nome` varchar(50) NOT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uq_nome` (`nome`)
 ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -118,7 +122,7 @@ CREATE TABLE `periodico` (
 
 LOCK TABLES `periodico` WRITE;
 /*!40000 ALTER TABLE `periodico` DISABLE KEYS */;
-INSERT INTO `periodico` VALUES (1,'A Marmota'),(2,'O Futuro'),(3,'Jornal das Famílias'),(4,'Semana Ilustrada'),(5,'O Cruzeiro');
+INSERT INTO `periodico` VALUES (1,'A Marmota'),(3,'Jornal das Famílias'),(5,'O Cruzeiro'),(2,'O Futuro'),(4,'Semana Ilustrada');
 /*!40000 ALTER TABLE `periodico` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -131,4 +135,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-06-11 19:42:57
+-- Dump completed on 2025-06-14 18:03:05

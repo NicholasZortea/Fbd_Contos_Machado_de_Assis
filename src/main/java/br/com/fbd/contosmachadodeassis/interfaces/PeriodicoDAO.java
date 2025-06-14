@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static br.com.fbd.contosmachadodeassis.utils.JDBCUtil.getConnection;
+import java.sql.SQLException;
 
 public class PeriodicoDAO implements GenericDAO<Periodico> {
 
@@ -20,8 +21,8 @@ public class PeriodicoDAO implements GenericDAO<Periodico> {
         ) {
             insertSQL.setString(1, periodico.getNome());
         }
-        catch (Exception e) {
-            e.printStackTrace();
+        catch (SQLException e) {
+            System.out.println("Erro ao inserir Periodico: " + e.getMessage());
         }
     }
 
