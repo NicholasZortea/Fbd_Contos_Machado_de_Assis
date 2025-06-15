@@ -18,6 +18,10 @@ public class Conto {
         this.idClassificacao = idClassificacao;
     }
 
+    public Conto() {
+    }
+    
+
     @Override
     public String toString() {
         return "Conto [ID = " + id + ", Titulo = " + titulo + ", Ano de Publicacao = " + anoPublicacao + ", Numero de Palavras = " + numPalavras

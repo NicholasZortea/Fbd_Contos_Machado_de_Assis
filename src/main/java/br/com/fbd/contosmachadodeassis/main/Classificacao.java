@@ -3,6 +3,11 @@ package br.com.fbd.contosmachadodeassis.main;
 public class Classificacao {
     private int id;
     private String tipo;
+    public static String QUESTIONAVEL = "autoria questionavel";
+    public static String NOVELA = "conto com caracteristicas de novela";
+    public static String PADRAO = "conto padrao";
+    public static String EXPERIMENTAL = "experimental e dificil classificacao";
+    public static String REESCRITO = "reescrito";
 
     public Classificacao(int id, String tipo) {
         this.id = id;
@@ -11,7 +16,7 @@ public class Classificacao {
 
     @Override
     public String toString() {
-        return "Coletanea [ID = " + id + ", Tipo = " + tipo;
+        return "Classificacao [ID = " + id + ", Tipo = " + tipo;
     }
 
     public void setId(int id) {
@@ -29,10 +34,15 @@ public class Classificacao {
     public String getTipo() {
         return tipo;
     }
-}
 
-/*CREATE TABLE `classificacao` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `tipo` varchar(50) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;*/
+      public static String getClassificacaoBasedOnAsterisksAmount(int amountOfAsterisk) {
+        String s = null;
+        switch(amountOfAsterisk){
+            case 1 -> s = REESCRITO;
+            case 2 -> s = QUESTIONAVEL;
+            case 3 -> s = EXPERIMENTAL;
+            case 4 -> s = NOVELA;
+        }
+        return s;
+    }
+}
