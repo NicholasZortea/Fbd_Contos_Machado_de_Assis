@@ -3,7 +3,7 @@ package br.com.fbd.contosmachadodeassis.main;
 public class Classificacao {
     private int id;
     private String tipo;
-    public static String QUESTIONAVEL = "autoria questionaval";
+    public static String QUESTIONAVEL = "autoria questionavel";
     public static String NOVELA = "conto com caracteristicas de novela";
     public static String PADRAO = "conto padrao";
     public static String EXPERIMENTAL = "experimental e dificil classificacao";
