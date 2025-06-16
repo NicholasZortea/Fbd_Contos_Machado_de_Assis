@@ -65,7 +65,7 @@ public class PeriodicoDAO implements GenericDAO<Periodico> {
             Connection con = getConnection(); PreparedStatement statement = con.prepareStatement(sql);) {
             statement.setString(1, nome);
             ResultSet rs = statement.executeQuery();
-            p = rs.next() ? new Periodico(rs.getInt("id"), rs.getString("nome")) : insertAndReturnObject(nome);
+            p = rs.next() ? new Periodico(rs.getInt("id"), nome) : insertAndReturnObject(nome);
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -73,14 +73,18 @@ public class PeriodicoDAO implements GenericDAO<Periodico> {
         }
     }
 
-    private static Periodico insertAndReturnObject(String nome){
+    private static Periodico insertAndReturnObject(String nome) {
         String sql = "INSERT INTO periodico (nome) VALUES (?)";
         Periodico p = null;
         try (
             Connection con = getConnection(); PreparedStatement statement = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);) {
             statement.setString(1, nome);
             statement.executeUpdate();
-            p = new Periodico(statement.getGeneratedKeys().getInt(1), nome);
+            ResultSet rs = statement.getGeneratedKeys();
+            if (rs.next()) {
+                int id = rs.getInt(1);
+                p = new Periodico(id, nome);
+            }
         } catch (Exception e) {
             e.printStackTrace();
         } finally {

@@ -1,8 +1,10 @@
 package br.com.fbd.contosmachadodeassis.main;
 
+import br.com.fbd.contosmachadodeassis.interfaces.ClassificacaoDAO;
 import br.com.fbd.contosmachadodeassis.interfaces.ColetaneaDAO;
 import br.com.fbd.contosmachadodeassis.interfaces.PeriodicoDAO;
 import java.io.IOException;
+import java.sql.Date;
 import java.util.ArrayList;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -18,8 +20,8 @@ public class WikiScrapper {
     public static int COLETANEA_INDEX = 3;
     public static int NMR_PALAVRAS_INDEX = 4;
 
-
     public ArrayList<Conto> scrapWiki() throws IOException {
+        ArrayList<Conto> contos = new ArrayList<>();
         Elements linhas = getLinesFromTable();
         for (Element linha : linhas) {
             if (ehLegenda(linha)) {
@@ -27,9 +29,12 @@ public class WikiScrapper {
                 System.out.println("[Linha de legenda ignorada]");
                 break;
             }
-            Conto contoFromLine = createContoFromLine(linha);
+            Conto conto = createContoFromLine(linha);
+            if (conto != null) {
+                contos.add(conto);
+            }
         }
-        return null;
+        return contos;
     }
 
     private Elements getLinesFromTable() throws IOException {
@@ -47,34 +52,50 @@ public class WikiScrapper {
     private Conto createContoFromLine(Element linha) {
         Conto c = new Conto();
         Elements colunas = linha.select("td");
+        if(colunas.size() < 5){
+            return null;
+        }
         Periodico periodico = PeriodicoDAO.findOrCreate(colunas.get(PERIODICO_INDEX).text());
         Coletanea coletanea = ColetaneaDAO.findOrCreate(colunas.get(COLETANEA_INDEX).text());
         String nome = colunas.get(TITULO_CONTO_INDEX).text();
-        String classificacao = getClassificacao(nome);
-        System.out.println();
+        String classificacaoStr = getClassificacao(nome);
+        String nomeSemCaracterEspecial = getTitleWithoutEspecialChars(nome);
+        Classificacao classificacao = ClassificacaoDAO.findOrCreate(classificacaoStr);
+        String date = colunas.get(DATA_CONTO_INDEX).text() + "/01"; //inclui dia 01 no padrao yyyy_mm_dd
+        date = date.replaceAll("/", "-");
+        int numPalavras = Integer.valueOf(colunas.get(NMR_PALAVRAS_INDEX).text());
+
+        c.setAnoPublicacao(Date.valueOf(date));
+        c.setIdClassificacao(classificacao.getId());
+        c.setIdColetanea(coletanea.getId());
+        c.setIdPeriodico(periodico.getId());
+        c.setNumPalavras(numPalavras);
+        c.setTitulo(nomeSemCaracterEspecial);
         return c;
     }
 
-    public static String getClassificacao(String nome){
-        if(!nome.contains("*")){
+    public static String getClassificacao(String nome) {
+        if (!nome.contains("*")) {
             return Classificacao.PADRAO;
         }
         return Classificacao.getClassificacaoBasedOnAsterisksAmount(getAmountOfAsterisk(nome));
     }
 
-    public static int getAmountOfAsterisk(String nome){
+    public static int getAmountOfAsterisk(String nome) {
         int cont = 0;
-        for (int i = 0; i < nome.length(); i++){
-            if(nome.charAt(i) == '*'){
+        for (int i = 0; i < nome.length(); i++) {
+            if (nome.charAt(i) == '*') {
                 cont++;
             }
         }
         return cont;
     }
 
-public static String getTitleWithoutEspecialChars(String nome) {
-    if (nome == null) return null;
-    return nome.replaceAll("[*\"]", "");
-}
+    public static String getTitleWithoutEspecialChars(String nome) {
+        if (nome == null) {
+            return null;
+        }
+        return nome.replaceAll("[*\"]", "");
+    }
 
 }

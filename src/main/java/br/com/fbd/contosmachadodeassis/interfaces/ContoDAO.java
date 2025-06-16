@@ -28,6 +28,7 @@ public class ContoDAO implements GenericDAO<Conto> {
             insertSQL.setInt(4, conto.getIdColetanea());
             insertSQL.setInt(5, conto.getIdPeriodico());
             insertSQL.setInt(6, conto.getIdClassificacao());
+            insertSQL.executeUpdate();
         }
         catch (SQLException e) {
             System.out.println("Erro ao inserir Conto: " + e.getMessage());
