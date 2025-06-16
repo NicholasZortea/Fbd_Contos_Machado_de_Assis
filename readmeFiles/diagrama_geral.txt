@@ -1,0 +1,41 @@
+@startuml
+actor User
+participant Main as "ContosMachadoDeAssis (main)"
+participant "ContoDAO.instance"
+participant Scraper as "WikiScrapper"
+participant "Target Website" as Website
+participant "ContoDAO"
+participant "PeriodicoDAO"
+participant "ColetaneaDAO"
+participant "ClassificacaoDAO"
+participant "Conto"
+
+User -> Main: main()
+Main -> Scraper: scrapWiki()
+Scraper -> Website: HTTP request (GET wiki page)
+Website --> Scraper: HTML response
+Scraper -> Scraper: getLinesFromTable(html)
+loop for each line in table
+Scraper -> Scraper: createContoFromLine(line)
+Scraper -> PeriodicoDAO: findOrCreate(periodico)
+PeriodicoDAO--> Scraper: Periodico
+Scraper -> ColetaneaDAO: findOrCreate(coletanea)
+ColetaneaDAO--> Scraper: Coletanea
+Scraper -> ClassificacaoDAO: findOrCreate(classificacao)
+ClassificacaoDAO --> Scraper: Classificacao
+Scraper -> Scraper: getTitleWithoutEspecialChars()
+create Conto
+Scraper -> Conto: new(date,idClassificacao,idColetanea,idPeriodico,numPalavras,titulo)
+Conto --> Scraper: Conto
+Scraper -> Scraper: Insere conto na lista
+end
+
+Scraper --> Main: Lista de contos
+create ContoDAO.instance
+Main -> ContoDAO.instance : new ContoDAO()
+loop for each conto in lista
+   Main -> Main : ContoDAO.instance.insert(conto)
+
+end
+Main --> User: Fim/processo concluído
+@enduml

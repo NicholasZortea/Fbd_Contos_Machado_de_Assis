@@ -1,0 +1,19 @@
+@startuml
+participant "Wiki Scrapper" as Client
+participant "DAO"
+Entity "Banco de Dados" as DB
+
+Client -> DAO: findOrCreate(entityStr)
+DAO -> DB: SELECT id FROM classificacao WHERE tipo = ?
+DB --> DAO: ResultSet (id) ou vazio
+
+alt Classificação encontrada
+    DAO -> DAO: new Classificacao(id, entityStr)
+    DAO --> Client : return Classificacao
+else Não encontrada
+    DAO -> DB: INSERT INTO classificacao (tipo) VALUES (?)
+    DB --> DAO: generated key (id)
+    DAO -> DAO: new Classificacao(id, entityStr)
+    DAO --> Client : return Classificacao
+end
+@enduml
