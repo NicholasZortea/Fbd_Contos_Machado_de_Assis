@@ -3,6 +3,11 @@ package br.com.fbd.contosmachadodeassis.main;
 public class Classificacao {
     private int id;
     private String tipo;
+    public static String QUESTIONAVEL = "autoria questionaval";
+    public static String NOVELA = "conto com caracteristicas de novela";
+    public static String PADRAO = "conto padrao";
+    public static String EXPERIMENTAL = "experimental e dificil classificacao";
+    public static String REESCRITO = "reescrito";
 
     public Classificacao(int id, String tipo) {
         this.id = id;
@@ -28,5 +33,16 @@ public class Classificacao {
 
     public String getTipo() {
         return tipo;
+    }
+
+      public static String getClassificacaoBasedOnAsterisksAmount(int amountOfAsterisk) {
+        String s = null;
+        switch(amountOfAsterisk){
+            case 1 -> s = REESCRITO;
+            case 2 -> s = QUESTIONAVEL;
+            case 3 -> s = EXPERIMENTAL;
+            case 4 -> s = NOVELA;
+        }
+        return s;
     }
 }

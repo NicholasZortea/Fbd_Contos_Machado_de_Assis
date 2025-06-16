@@ -1,5 +1,7 @@
 package br.com.fbd.contosmachadodeassis.main;
 
+import br.com.fbd.contosmachadodeassis.interfaces.ColetaneaDAO;
+import br.com.fbd.contosmachadodeassis.interfaces.PeriodicoDAO;
 import java.io.IOException;
 import java.util.ArrayList;
 import org.jsoup.Jsoup;
@@ -45,10 +47,34 @@ public class WikiScrapper {
     private Conto createContoFromLine(Element linha) {
         Conto c = new Conto();
         Elements colunas = linha.select("td");
-        for (Element col : colunas) {
-            System.out.print(col.text() + " | ");
-        }
+        Periodico periodico = PeriodicoDAO.findOrCreate(colunas.get(PERIODICO_INDEX).text());
+        Coletanea coletanea = ColetaneaDAO.findOrCreate(colunas.get(COLETANEA_INDEX).text());
+        String nome = colunas.get(TITULO_CONTO_INDEX).text();
+        String classificacao = getClassificacao(nome);
         System.out.println();
         return c;
     }
+
+    public static String getClassificacao(String nome){
+        if(!nome.contains("*")){
+            return Classificacao.PADRAO;
+        }
+        return Classificacao.getClassificacaoBasedOnAsterisksAmount(getAmountOfAsterisk(nome));
+    }
+
+    public static int getAmountOfAsterisk(String nome){
+        int cont = 0;
+        for (int i = 0; i < nome.length(); i++){
+            if(nome.charAt(i) == '*'){
+                cont++;
+            }
+        }
+        return cont;
+    }
+
+public static String getTitleWithoutEspecialChars(String nome) {
+    if (nome == null) return null;
+    return nome.replaceAll("[*\"]", "");
+}
+
 }
