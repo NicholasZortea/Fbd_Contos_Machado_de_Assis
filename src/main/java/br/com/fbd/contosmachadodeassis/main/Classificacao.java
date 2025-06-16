@@ -11,7 +11,7 @@ public class Classificacao {
 
     @Override
     public String toString() {
-        return "Coletanea [ID = " + id + ", Tipo = " + tipo;
+        return "Classificacao [ID = " + id + ", Tipo = " + tipo;
     }
 
     public void setId(int id) {
@@ -30,9 +30,3 @@ public class Classificacao {
         return tipo;
     }
 }
-
-/*CREATE TABLE `classificacao` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `tipo` varchar(50) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;*/

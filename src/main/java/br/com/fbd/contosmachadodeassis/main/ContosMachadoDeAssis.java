@@ -19,5 +19,7 @@ public class ContosMachadoDeAssis {
         System.out.println("Teste de senha: " + JDBCUtil.getProperties());
         Connection connection = JDBCUtil.getConnection();
         connection.close();
+        WikiScrapper scrapper = new WikiScrapper();
+        scrapper.scrapWiki();
     }
 }
